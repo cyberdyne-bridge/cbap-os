@@ -25,7 +25,7 @@ jobs:
 
       - name: installer smoke test
         run: |
-          mkdir -p /tmp/fake/kernel /tmp/fake/drivers/mc
+          mkdir -p /tmp/fake/kernel /tmp/fake/drivers/mc /tmp/rootfs
           echo '{}' > /tmp/fake/drivers/mc/device.json
           echo '{}' > /tmp/fake/drivers/mc/mapping.json
           bash install.sh --root /tmp/rootfs --cbap-src /tmp/fake \

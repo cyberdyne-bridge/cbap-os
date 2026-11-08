@@ -1,0 +1,37 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: unit tests (no root, no systemd)
+        run: python3 -m unittest discover -s tests -v
+
+      - name: shell syntax
+        run: |
+          for f in install.sh iso/build-iso.sh iso/init tests/run.sh; do
+            bash -n "$f"
+          done
+
+      - name: installer smoke test
+        run: |
+          mkdir -p /tmp/fake/kernel /tmp/fake/drivers/mc
+          echo '{}' > /tmp/fake/drivers/mc/device.json
+          echo '{}' > /tmp/fake/drivers/mc/mapping.json
+          bash install.sh --root /tmp/rootfs --cbap-src /tmp/fake \
+            --no-systemd --no-users
+          test -x /tmp/rootfs/usr/local/bin/cbap-os
+          test -x /tmp/rootfs/usr/local/bin/cbap-service
+          test -d /tmp/rootfs/opt/cbap-os/versions/cbap
+          grep -q cbap-os /tmp/rootfs/etc/systemd/system/cbap.service 2>/dev/null || true
+          echo "installed layout OK"

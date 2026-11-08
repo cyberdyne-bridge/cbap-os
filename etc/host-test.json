@@ -1,0 +1,6 @@
+{
+  "host": "10.0.2.2",
+  "port": 18765,
+  "token": "",
+  "note": "QEMU user-net host gateway. Read <socket>.token on the host and enter it in Control Center; do not ship a fixed test token."
+}

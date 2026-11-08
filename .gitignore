@@ -1,0 +1,8 @@
+out/
+*.iso
+rootfs/
+rootfs-*/
+iso-work/
+*.squashfs
+__pycache__/
+*.py[cod]
